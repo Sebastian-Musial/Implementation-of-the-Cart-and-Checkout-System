@@ -3,7 +3,7 @@ from sqlmodel import Session
 
 from app.schemas import ClientRead, ClientCreate
 from app.database import get_session
-from app.models import Client
+from app.models import Client, Cart
 
 
 
@@ -12,7 +12,13 @@ router = APIRouter()
 @router.post("/clients", response_model=ClientRead, status_code=status.HTTP_201_CREATED, tags=["clients"])
 def create_client(payload: ClientCreate, session: Session = Depends(get_session)) -> Client:
     client = Client.model_validate(payload)
+
     session.add(client)
+    session.flush()
+
+    cart = Cart(client_id=client.client_id)
+    session.add(cart)
+
     session.commit()
     session.refresh(client)
     return client
