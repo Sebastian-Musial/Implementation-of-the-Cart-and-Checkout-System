@@ -51,3 +51,19 @@ class CartRead(SQLModel):
 
 class ChangeAmountProductInCart(SQLModel):
     product_amount: int = Field(gt = 0) 
+
+
+
+# Order
+class OrderItemRead(SQLModel):
+    product_id: int
+    product_name: str
+    product_amount: int
+    unit_price: Decimal = Field(decimal_places=3) 
+    
+class OrderRead(SQLModel):
+    client_id: int
+    order_id: int
+    items: list[OrderItemRead]
+    total_order_price: Decimal = Field(decimal_places=3)
+    
