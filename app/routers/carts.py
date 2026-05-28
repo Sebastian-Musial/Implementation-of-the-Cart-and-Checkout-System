@@ -96,33 +96,33 @@ def add_item_or_update_item_in_cart(cart_id: int, payload: AddItemToCart, sessio
     return build_cart_items_list(cart, session)
 
 
-# @router.delete("/carts/{cart_id}/items/{product_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["cart"])
-# def delete_cart_item(cart_id: int, product_id: int, session: Session = Depends(get_session),) -> None:
-#     cart = session.get(Cart, cart_id)
+@router.delete("/carts/{cart_id}/items/{product_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["cart"])
+def delete_cart_item(cart_id: int, product_id: int, session: Session = Depends(get_session),) -> None:
+    cart = session.get(Cart, cart_id)
 
-#     if cart is None:
-#         raise HTTPException(
-#             status_code=status.HTTP_404_NOT_FOUND,
-#             detail="Cart not found",
-#         )
+    if cart is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Cart not found",
+        )
     
-#     statement = select(CartItem).where(
-#         CartItem.cart_id == cart_id,
-#         CartItem.product_id == product_id,
-#     )
+    statement = select(CartItem).where(
+        CartItem.cart_id == cart_id,
+        CartItem.product_id == product_id,
+    )
 
-#     cart_item = session.exec(statement).first()
+    cart_item = session.exec(statement).first()
 
-#     if cart_item  is None:
-#         raise HTTPException(
-#             status_code=status.HTTP_404_NOT_FOUND,
-#             detail="Item not found in cart",
-#         )
+    if cart_item  is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Item not found in cart",
+        )
 
-#     session.delete(cart_item)
-#     session.commit()
+    session.delete(cart_item)
+    session.commit()
 
-#     return None
+    return None
 
 
 @router.patch("/carts/{cart_id}/items/{product_id}", response_model=CartRead, status_code=status.HTTP_200_OK, tags=["cart"])
