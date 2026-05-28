@@ -1,6 +1,8 @@
 from sqlmodel import Field, SQLModel
 from decimal import Decimal
 
+
+
 # Product
 class ProductCreate(SQLModel):
     name: str = Field(min_length=1, max_length=80)
@@ -16,6 +18,8 @@ class ProductRead(SQLModel):
 class ProductChangeStock(SQLModel):
     amount_in_stock : int = Field (ge=0)
 
+
+
 # Client
 class ClientCreate(SQLModel):
     name: str = Field(min_length=1, max_length=80)
@@ -27,3 +31,23 @@ class ClientRead(SQLModel):
     name: str
     surname: str
     phone_number: str
+
+
+
+# Cart
+class AddItemToCart(SQLModel):
+    product_id: int
+    product_amount: int = Field(gt = 0)
+
+class CartItemRead(SQLModel):
+    product_id: int
+    product_name: str
+    product_amount: int
+
+class CartRead(SQLModel):
+    client_id: int
+    cart_id: int
+    items: list[CartItemRead] 
+
+class ChangeAmountProductInCart(SQLModel):
+    product_amount: int = Field(gt = 0) 
